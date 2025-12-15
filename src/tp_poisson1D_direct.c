@@ -5,6 +5,7 @@
 /* using direct methods (LU factorization)*/
 /******************************************/
 #include "lib_poisson1D.h"
+#include <time.h>
 
 #define TRF 0  /* Use LAPACK dgbtrf for LU factorization */
 #define TRI 1  /* Use custom tridiagonal LU factorization */
@@ -93,6 +94,10 @@ int main(int argc,char *argv[])
     dgbtrftridiag(&la, &la, &kl, &ku, AB, &lab, ipiv, &info);
   }
 
+  struct timespec t0, t1;
+  clock_gettime(CLOCK_MONOTONIC, &t0);
+
+
   /* Back-substitution to solve the system after factorization */
   if (IMPLEM == TRI || IMPLEM == TRF){
     /* Solution (Triangular) - solve using the LU factors */
@@ -107,7 +112,12 @@ int main(int argc,char *argv[])
   /* Alternative: solve directly using dgbsv */
   if (IMPLEM == SV) {
     // TODO : use dgbsv
+        dgbsv_(&la, &kl, &ku, &NRHS, AB, &lab, ipiv, RHS, &la, &info);
   }
+
+  clock_gettime(CLOCK_MONOTONIC, &t1);
+  double elapsed = (t1.tv_sec - t0.tv_sec) + 1e-9 * (t1.tv_nsec - t0.tv_nsec);
+  printf("Solve time = %g s\n", elapsed);
 
   /* Write results to files */
   write_GB_operator_colMajor_poisson1D(AB, &lab, &la, "LU.dat");  /* LU factors */
