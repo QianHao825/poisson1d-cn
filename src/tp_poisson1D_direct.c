@@ -84,6 +84,11 @@ int main(int argc,char *argv[])
   printf("Solution with LAPACK\n");
   ipiv = (int *) calloc(la, sizeof(int));  /* Pivot indices for LU factorization */
 
+  
+  struct timespec t0, t1;
+  clock_gettime(CLOCK_MONOTONIC, &t0);
+
+
   /* LU Factorization using LAPACK's general band factorization */
   if (IMPLEM == TRF) {
     dgbtrf_(&la, &la, &kl, &ku, AB, &lab, ipiv, &info);
@@ -93,10 +98,6 @@ int main(int argc,char *argv[])
   if (IMPLEM == TRI) {
     dgbtrftridiag(&la, &la, &kl, &ku, AB, &lab, ipiv, &info);
   }
-
-  struct timespec t0, t1;
-  clock_gettime(CLOCK_MONOTONIC, &t0);
-
 
   /* Back-substitution to solve the system after factorization */
   if (IMPLEM == TRI || IMPLEM == TRF){
