@@ -57,7 +57,7 @@ void set_grid_points_1D(double* x, int* la);
 /**
  * Compute the relative forward error between two vectors
  * @param x: Computed solution vector (size la)
- * @param y: Reference/exact solution vector (size la)
+ * @param y: Reference/exact solution vector (size la), can be modified
  * @param la: Vector size
  * @return Relative forward error ||x-y||/||x||
  */
@@ -214,3 +214,29 @@ int indexABCol(int i, int j, int *lab);
  * @return info value
  */
 int dgbtrftridiag(int *la, int *n, int *kl, int *ku, double *AB, int *lab, int *ipiv, int *info);
+
+
+/* ===== EX10 : Sparse (CSR / CSC) ===== */
+
+int nnz_poisson1D(int n);
+
+void set_CSR_poisson1D(int n, int *rowptr, int *colind, double *val);
+void set_CSC_poisson1D(int n, int *colptr, int *rowind, double *val);
+
+void dcsrmv(int n, const int *rowptr, const int *colind, const double *val,
+            const double *x, double *y);
+
+void dcscmv(int n, const int *colptr, const int *rowind, const double *val,
+            const double *x, double *y);
+
+void richardson_alpha_csr(int n, const int *rowptr, const int *colind, const double *val,
+                          const double *b, double *x, double alpha, double tol, int maxit,
+                          double *resvec, int *nbite);
+
+void jacobi_csr(int n, const int *rowptr, const int *colind, const double *val,
+                const double *b, double *x, double tol, int maxit,
+                double *resvec, int *nbite);
+
+void gauss_seidel_csr(int n, const int *rowptr, const int *colind, const double *val,
+                      const double *b, double *x, double tol, int maxit,
+                      double *resvec, int *nbite);

@@ -84,10 +84,8 @@ int main(int argc,char *argv[])
   printf("Solution with LAPACK\n");
   ipiv = (int *) calloc(la, sizeof(int));  /* Pivot indices for LU factorization */
 
-  
   struct timespec t0, t1;
   clock_gettime(CLOCK_MONOTONIC, &t0);
-
 
   /* LU Factorization using LAPACK's general band factorization */
   if (IMPLEM == TRF) {
@@ -112,8 +110,7 @@ int main(int argc,char *argv[])
 
   /* Alternative: solve directly using dgbsv */
   if (IMPLEM == SV) {
-    // TODO : use dgbsv
-        dgbsv_(&la, &kl, &ku, &NRHS, AB, &lab, ipiv, RHS, &la, &info);
+    dgbsv_(&la, &kl, &ku, &NRHS, AB, &lab, ipiv, RHS, &la, &info);
   }
 
   clock_gettime(CLOCK_MONOTONIC, &t1);
