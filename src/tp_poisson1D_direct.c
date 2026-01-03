@@ -17,6 +17,7 @@
  * @param argc: Number of command-line arguments
  * @param argv: Array of argument strings
  *              argv[1] (optional): Implementation method (0=TRF, 1=TRI, 2=SV)
+ *              argv[2] (optional): nbpoints (total discretization points)
  * @return 0 on success
  */
 int main(int argc,char *argv[])
@@ -38,16 +39,22 @@ int main(int argc,char *argv[])
 
   double relres;                 /* Relative forward error */
 
-  if (argc == 2) {
+  /* ---- CHANGED: allow up to 2 args ---- */
+  if (argc >= 2) {
     IMPLEM = atoi(argv[1]);
-  } else if (argc > 2) {
-    perror("Application takes at most one argument");
+  }
+  if (argc > 3) {
+    perror("Application takes at most two arguments");
     exit(1);
   }
 
   /* Problem setup */
   NRHS=1;           /* Solving Ax=b with one right-hand side */
   nbpoints=10;      /* Total number of discretization points (including boundaries) */
+  /* ---- CHANGED: nbpoints can be provided by argv[2] ---- */
+  if (argc >= 3){
+    nbpoints = atoi(argv[2]);
+  }
   la=nbpoints-2;    /* Number of interior points (excluding boundaries) */
   T0=-5.0;          /* Dirichlet boundary condition at x=0 */
   T1=5.0;           /* Dirichlet boundary condition at x=1 */

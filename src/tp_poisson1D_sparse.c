@@ -6,7 +6,7 @@
 int main(void)
 {
     int n = 100;
-    int maxit = 1000;
+    int maxit = 10000;
     double tol = 1e-6;
     double alpha = 0.5;
 

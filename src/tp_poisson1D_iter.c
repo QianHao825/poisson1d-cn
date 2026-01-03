@@ -16,6 +16,7 @@
  * @param argc: Number of command-line arguments
  * @param argv: Array of argument strings
  *              argv[1] (optional): Method selection (0=ALPHA, 1=JAC, 2=GS)
+ *              argv[2] (optional): nbpoints (total discretization points)
  * @return 0 on success
  */
 int main(int argc,char *argv[])
@@ -25,7 +26,7 @@ int main(int argc,char *argv[])
   int ierr;                           /* Error code */
   int jj;                             /* Loop counter */
   int nbpoints, la;                   /* nbpoints: total points, la: interior points */
-  int ku, kl, lab, kv;               /* Band matrix parameters */
+  int ku, kl, lab, kv;                /* Band matrix parameters */
   int *ipiv;                          /* Pivot indices (unused in iterative methods) */
   int info;                           /* Info parameter */
   int NRHS;                           /* Number of right-hand sides */
@@ -39,16 +40,22 @@ int main(int argc,char *argv[])
 
   double opt_alpha;                   /* Optimal relaxation parameter */
 
-  if (argc == 2) {
+  /* ---- CHANGED: allow up to 2 args ---- */
+  if (argc >= 2) {
     IMPLEM = atoi(argv[1]);
-  } else if (argc > 2) {
-    perror("Application takes at most one argument");
+  }
+  if (argc > 3) {
+    perror("Application takes at most two arguments");
     exit(1);
   }
 
   /* Problem size setup */
   NRHS=1;           /* Single right-hand side */
   nbpoints=12;      /* Total discretization points */
+  /* ---- CHANGED: nbpoints can be provided by argv[2] ---- */
+  if (argc >= 3) {
+    nbpoints = atoi(argv[2]);
+  }
   la=nbpoints-2;    /* Interior points only */
 
   /* Dirichlet Boundary conditions */
@@ -65,7 +72,7 @@ int main(int argc,char *argv[])
   /* Setup the Poisson 1D problem */
   /* General Band Storage */
   set_grid_points_1D(X, &la);                              /* Generate uniform grid */
-  set_dense_RHS_DBC_1D(RHS,&la,&T0,&T1);                  /* Set RHS with BC */
+  set_dense_RHS_DBC_1D(RHS,&la,&T0,&T1);                   /* Set RHS with BC */
   set_analytical_solution_DBC_1D(EX_SOL, X, &la, &T0, &T1); /* Compute exact solution */
   
   /* Write initial data to files */
@@ -131,8 +138,6 @@ int main(int argc,char *argv[])
 
   /* Write solution and convergence history to files */
   write_vec(SOL, &la, "SOL.dat");              /* Final solution */
-
-  /* Write convergence history */
   write_vec(resvec, &nbite, "RESVEC.dat");     /* Residual norm at each iteration */
 
   /* Free allocated memory */

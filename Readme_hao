@@ -1,0 +1,147 @@
+
+1.Démarrer le conteneur:
+docker run --rm -it   -v "$(pwd)":/app:z   -w /app   poisson-env   /bin/bash
+
+2.Compiler le projet:
+make
+
+3.Obtenir les résultats et les tracer:
+cd bin
+
+//Ex5 et Ex6: Méthode directe:./tpPoisson1D_direct 0/1/2 N
+./tpPoisson1D_direct 0 10
+./tpPoisson1D_direct 1 10
+./tpPoisson1D_direct 2 10
+./tpPoisson1D_direct 0 100
+./tpPoisson1D_direct 1 100
+./tpPoisson1D_direct 2 100
+./tpPoisson1D_direct 0 1000
+./tpPoisson1D_direct 1 1000
+./tpPoisson1D_direct 2 1000
+
+
+//Ex7, Ex8 et Ex9: Méthode itérative:  ./tpPoisson1D_iter 0/1/2
+
+./tpPoisson1D_iter 0
+cp RESVEC.dat RESVEC_0.dat
+cp SOL.dat    SOL_0.dat
+
+./tpPoisson1D_iter 1
+cp RESVEC.dat RESVEC_1.dat
+cp SOL.dat    SOL_1.dat
+
+./tpPoisson1D_iter 2
+cp RESVEC.dat RESVEC_2.dat
+cp SOL.dat    SOL_2.dat
+
+
+//Ex7, Ex8 et Ex9: Tracer les résultats:(exit docker)
+./plot_ex789.sh bin
+
+//Ex10: Méthode directe avec format CSR/CSC
+./tpPoisson1D_sparse
+
+
+
+
+
+
+Resultats sur mon ordinateur:
+//Ex5 et Ex6
+root@0aa513a05d99:/app/bin# ./tpPoisson1D_direct 0 10 
+--------- Poisson 1D ---------
+
+Solution with LAPACK
+Solve time = 0.000394588 s
+
+The relative forward error is relres = 2.692638e-16
+
+
+--------- End -----------
+root@0aa513a05d99:/app/bin# ./tpPoisson1D_direct 1 10
+--------- Poisson 1D ---------
+
+Solution with LAPACK
+Solve time = 0.00038209 s
+
+The relative forward error is relres = 2.692638e-16
+
+
+--------- End -----------
+root@0aa513a05d99:/app/bin# ./tpPoisson1D_direct 2 10
+--------- Poisson 1D ---------
+
+Solution with LAPACK
+Solve time = 0.000419755 s
+
+The relative forward error is relres = 2.692638e-16
+
+
+--------- End -----------
+root@0aa513a05d99:/app/bin# ./tpPoisson1D_direct 0 100
+--------- Poisson 1D ---------
+
+Solution with LAPACK
+Solve time = 4.1426e-05 s
+
+The relative forward error is relres = 6.052400e-15
+
+
+--------- End -----------
+root@0aa513a05d99:/app/bin# ./tpPoisson1D_direct 1 100
+--------- Poisson 1D ---------
+
+Solution with LAPACK
+Solve time = 4.0234e-05 s
+
+The relative forward error is relres = 6.052400e-15
+
+
+--------- End -----------
+root@0aa513a05d99:/app/bin# ./tpPoisson1D_direct 2 100
+--------- Poisson 1D ---------
+
+Solution with LAPACK
+Solve time = 3.9723e-05 s
+
+The relative forward error is relres = 6.052400e-15
+
+
+--------- End -----------
+root@0aa513a05d99:/app/bin# ./tpPoisson1D_direct 0 1000
+--------- Poisson 1D ---------
+
+Solution with LAPACK
+Solve time = 0.00197088 s
+
+The relative forward error is relres = 1.054400e-13
+
+
+--------- End -----------
+root@0aa513a05d99:/app/bin# ./tpPoisson1D_direct 1 1000
+--------- Poisson 1D ---------
+
+Solution with LAPACK
+Solve time = 0.00101145 s
+
+The relative forward error is relres = 1.054400e-13
+
+
+--------- End -----------
+root@0aa513a05d99:/app/bin# ./tpPoisson1D_direct 2 1000
+--------- Poisson 1D ---------
+
+Solution with LAPACK
+Solve time = 0.00128592 s
+
+The relative forward error is relres = 1.054400e-13
+
+
+--------- End -----------
+
+
+
+//Ex10
+root@0aa513a05d99:/app/bin# ./tpPoisson1D_sparse       
+EX10 (CSR Richardson): 10000 iterations
+last residual = 7.169079e-03

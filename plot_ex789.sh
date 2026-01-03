@@ -55,6 +55,7 @@ plot \
   "$DATADIR/RESVEC_1.dat" using 0:1 with lines lw 2 title "Jacobi", \
   "$DATADIR/RESVEC_2.dat" using 0:1 with lines lw 2 title "Gauss-Seidel"
 
+
 EOF
 
 echo "Plots generated in $OUTDIR/"
